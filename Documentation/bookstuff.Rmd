@@ -1,0 +1,93 @@
+---
+title: "Bookstuff"
+author: "David Duong"
+date: "2024-04-27"
+output: html_document
+---
+
+```{r setup}
+# Add your library below.
+
+library(shiny)
+
+```
+
+## R Bookstuff
+
+The bookstuff function creates a shiny app that lets you add,remove, import and export book data to a csv file.
+
+```{r, bookstuff}
+bookStuff <- function() {
+  
+  ui <- fluidPage(
+    titlePanel("Bookshelf"),
+    sidebarLayout(
+      sidebarPanel(
+        fileInput("file",
+                  label = "Upload a CSV file",
+                  multiple = FALSE,
+                  accept = c(".csv"),
+                  buttonLabel = "Upload"),
+        textInput("title", "Book Title"),
+        textInput("author", "Author"),
+        selectInput("status", "Status", choices = c("Finished", "Currently Reading", "To Be Read")),
+        actionButton("addBtn", "Add Book"),
+        actionButton("removeBtn", "Remove Book"),
+        actionButton("exportBtn", "Export to CSV")
+      ),
+      mainPanel(
+        dataTableOutput("bookTable")
+      )
+    )
+  )
+  
+  server <- function(input, output, session) {
+    # Initialize reactiveValues to store books
+    rv <- reactiveValues(books = data.frame(Title = character(), Author = character(), Status = character(), stringsAsFactors = FALSE))
+    
+    # load csv file
+    observeEvent(input$file, {
+      
+      rv$books <- read.csv(input$file$datapath)
+    })
+    
+    # Add Book button 
+    observeEvent(input$addBtn, {
+      author <- input$author
+      title <- input$title
+      status <- input$status
+      new_book <- data.frame(Author = author, Title = title, Status = status, stringsAsFactors = FALSE)
+      rv$books <- rbind(rv$books, new_book)
+    })
+    
+    # Remove Book button 
+    observeEvent(input$removeBtn, {
+      title_to_remove <- input$title
+      rv$books <- rv$books[rv$books$Title != title_to_remove, ]
+    })
+    
+    # Export to CSV button 
+    observeEvent(input$exportBtn, {
+      write.csv(rv$books, 'books.csv', row.names = FALSE)
+    })
+    
+    # print df
+    output$bookTable <- renderDataTable({
+      rv$books
+    })
+  }
+  
+  shinyApp(ui = ui, server = server)
+}
+```
+
+## How to Use
+
+The function lets you input author, title information as well as categorized them based on whether the book is finished, reading, or to be read. It also has the option export the list as a csv or you can also import your own list instead of starting a new one. I provided a sample list within the data folder to try.
+
+
+```{r, example}
+bookStuff()
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
