@@ -2,7 +2,7 @@ Package: bookstuff
 Title: Manage Book Collection
 Version: 0.0.0.9000
 Authors@R: David Duong
-Description: Lets you manage your book collection.
+Description: Creates a shiny app that lets you manage your book collection.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
