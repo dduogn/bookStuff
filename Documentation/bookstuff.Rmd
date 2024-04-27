@@ -83,11 +83,11 @@ bookStuff <- function() {
 
 ## How to Use
 
-The function lets you input author, title information as well as categorized them based on whether the book is finished, reading, or to be read. It also has the option export the list as a csv or you can also import your own list instead of starting a new one. I provided a sample list within the data folder to try.
+The function lets you input author, title information as well as categorized them based on whether the book is finished, reading, or to be read. It also has the option export the list as a csv named books.csv or you can also import your own list instead of starting a new one. I provided a sample list within the data folder to try.
 
 
 ```{r, example}
 bookStuff()
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
